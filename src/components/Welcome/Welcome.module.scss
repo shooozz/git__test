@@ -1,0 +1,13 @@
+@import "../../styles/variables";
+
+.content {
+    display: flex;
+    height: 80vh;
+    justify-content: center;
+    align-items: center;
+    h1 {
+        font-size: $font-size-large;
+        font-weight: 400;
+        letter-spacing: 0.17px;
+    }
+}
