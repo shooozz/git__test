@@ -1,66 +1,58 @@
 import React from "react";
 import styles from "./Pagination.module.scss";
 import { TablePagination } from "@mui/material";
-import { useAppDispatch } from "../../redux/store";
+import { RootState, useAppDispatch } from "../../redux/store";
 import { fetchRepositories } from "../../redux/repo/slice";
+import { useSelector } from "react-redux";
+import { setPage, setPerPage } from "../../redux/query/slice";
+import { selectCountRepos } from "../../redux/repo/selector";
 
-interface PaginationProps {
-    searchValue: string;
-    page: number;
-    setPage: (value: number) => void;
-    rowsPerPage: number;
-    setRowsPerPage: (value: number) => void;
-}
-
-export const Pagination: React.FC<PaginationProps> = ({
-    searchValue,
-    page,
-    setPage,
-    rowsPerPage,
-    setRowsPerPage,
-}) => {
-    // Стейт для отслеживания текущей страницы и количества строк на страницу
+export const Pagination: React.FC = () => {
     const dispatch = useAppDispatch();
+    const { query, per_page, page } = useSelector(
+        (state: RootState) => state.queryParams
+    );
+    const totalCount = useSelector(selectCountRepos);
 
-    const query = {
-        query: searchValue,
-        page: page,
-        per_page: rowsPerPage - 1,
-    };
-
+    React.useEffect(() => {
+        dispatch(fetchRepositories({ query, per_page, page }));
+    }, [page, per_page, query, dispatch]);
     // Обработчик изменения страницы
     const handleChangePage = (
         event: React.MouseEvent<HTMLButtonElement> | null,
         newPage: number
     ) => {
-        setPage(newPage);
-        dispatch(fetchRepositories(query));
+        dispatch(setPage(newPage));
     };
 
     // Обработчик изменения количества строк на странице
     const handleChangeRowsPerPage = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0); // Возвращаемся на первую страницу при изменении количества строк
-        dispatch(fetchRepositories(query));
+        dispatch(setPerPage(parseInt(event.target.value, 10)));
+        dispatch(setPage(1)); // Возвращаемся на первую страницу при изменении количества строк
     };
 
     return (
         <div className={styles.content}>
             <TablePagination
                 component="div"
-                count={4} // Общее количество элементов
-                page={page}
+                count={totalCount}
+                page={page as number}
                 onPageChange={handleChangePage}
-                rowsPerPage={rowsPerPage}
+                rowsPerPageOptions={[5, 10, 15, 20, 25, 30]}
+                rowsPerPage={per_page as number}
                 onRowsPerPageChange={handleChangeRowsPerPage}
                 labelRowsPerPage="Rows per page:"
                 labelDisplayedRows={({ from, to, count }) =>
                     `${from}-${to} of ${count}`
                 }
-                nextIconButtonProps={{ "aria-label": "Next page" }}
-                backIconButtonProps={{ "aria-label": "Previous page" }}
+                slotProps={{
+                    actions: {
+                        nextButton: { "aria-label": "Next page" },
+                        previousButton: { "aria-label": "Previous page" },
+                    },
+                }}
             />
         </div>
     );

@@ -1,25 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { FetchReposParams, Repository, ReposState } from "./types";
-import { Status } from "../types";
+import { ReposState } from "./types";
+import { FetchReposParams, Status } from "../types";
 const URL_GIT = import.meta.env.VITE_URL_GIT;
 const API_KEY = import.meta.env.VITE_API_KEY;
 
+// incomplete_results
+// items
+// total_count
+
 const initialState: ReposState = {
-    repositories: [],
+    items: [],
+    total_count: 0,
     status: Status.IDLE,
     error: null,
 };
 
 export const fetchRepositories = createAsyncThunk(
     "repos/fetchRepositories",
-    async ({
-        query,
-        sort = "stars",
-        order = "desc",
-        per_page = 30,
-        page = 1,
-    }: FetchReposParams) => {
+    async ({ query, sort, order, per_page, page }: FetchReposParams) => {
         const response = await axios.get(`${URL_GIT}/search/repositories`, {
             headers: {
                 Authorization: `token ${API_KEY}`,
@@ -32,7 +31,7 @@ export const fetchRepositories = createAsyncThunk(
                 page,
             },
         });
-        return response.data.items as Repository[];
+        return response.data as ReposState;
     }
 );
 
@@ -47,7 +46,8 @@ const repoSlice = createSlice({
             })
             .addCase(fetchRepositories.fulfilled, (state, action) => {
                 state.status = Status.SUCCESS;
-                state.repositories = action.payload;
+                state.items = action.payload.items;
+                state.total_count = action.payload.total_count;
             })
             .addCase(fetchRepositories.rejected, (state, action) => {
                 state.status = Status.ERROR;

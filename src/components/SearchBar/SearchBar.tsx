@@ -2,34 +2,28 @@ import React from "react";
 import { TextField, Button } from "@mui/material";
 import styles from "./SearchBar.module.scss";
 import { fetchRepositories } from "../../redux/repo/slice";
-import { useAppDispatch } from "../../redux/store";
+import { RootState, useAppDispatch } from "../../redux/store";
+import { useSelector } from "react-redux";
+import { setSearchValue } from "../../redux/query/slice";
 
-interface SearchBarProps {
-    searchValue: string;
-    setSearchValue: (value: string) => void;
-    rowsPerPage: number;
-    page: number;
-}
-
-export const SearchBar: React.FC<SearchBarProps> = ({
-    searchValue,
-    setSearchValue,
-    page,
-    rowsPerPage,
-}) => {
+export const SearchBar: React.FC = () => {
     const dispatch = useAppDispatch();
+    const { query, per_page, page } = useSelector(
+        (state: RootState) => state.queryParams
+    );
+    // const status = useSelector((state: RootState) => state.repos.status);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchValue(event.target.value);
+        dispatch(setSearchValue(event.target.value));
     };
 
     const handleSearch = () => {
-        if (searchValue) {
+        if (query) {
             dispatch(
                 fetchRepositories({
-                    query: searchValue,
-                    per_page: rowsPerPage,
-                    page: page,
+                    query,
+                    per_page,
+                    page,
                 })
             );
         } else {
@@ -42,7 +36,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 variant="outlined"
                 placeholder="Введите поисковый запрос"
                 className={styles.searchInput}
-                value={searchValue}
+                value={query}
                 onChange={handleInputChange}
                 sx={{
                     "& .MuiOutlinedInput-root": {

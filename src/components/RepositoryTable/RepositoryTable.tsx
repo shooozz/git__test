@@ -23,24 +23,10 @@ const tableHead = [
     "Дата обновления",
 ];
 
-interface RepositoryTableProps {
-    searchValue: string;
-    page: number;
-    setPage: (value: number) => void;
-    rowsPerPage: number;
-    setRowsPerPage: (value: number) => void;
-}
+export const RepositoryTable: React.FC = () => {
+    const resultsRepo = useSelector(selectRepos);
 
-export const RepositoryTable: React.FC<RepositoryTableProps> = ({
-    searchValue,
-    page,
-    setPage,
-    rowsPerPage,
-    setRowsPerPage,
-}) => {
-    const data = useSelector(selectRepos);
-
-    const repositories = data.map((repo) => ({
+    const repositories = resultsRepo.map((repo) => ({
         forks_count: repo.forks_count,
         language: repo.language,
         name: repo.name,
@@ -76,13 +62,7 @@ export const RepositoryTable: React.FC<RepositoryTableProps> = ({
                 </Table>
             </TableContainer>
 
-            <Pagination
-                searchValue={searchValue}
-                page={page}
-                setPage={setPage}
-                rowsPerPage={rowsPerPage}
-                setRowsPerPage={setRowsPerPage}
-            />
+            <Pagination />
         </div>
     );
 };

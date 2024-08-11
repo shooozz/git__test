@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import repoReducer from "./repo/slice";
+import queryParamsSlice from "./query/slice";
 import { useDispatch } from "react-redux";
 
 export const store = configureStore({
     reducer: {
         repos: repoReducer,
+        queryParams: queryParamsSlice,
     },
 });
 

@@ -12,15 +12,8 @@ export interface Repository {
 }
 
 export interface ReposState {
-    repositories: Repository[];
+    items: Repository[];
+    total_count: number;
     status: Status.IDLE | Status.LOADING | Status.SUCCESS | Status.ERROR;
     error: string | null;
-}
-
-export interface FetchReposParams {
-    query: string;
-    sort?: string;
-    order?: string;
-    per_page?: number;
-    page?: number;
 }

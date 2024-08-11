@@ -17,30 +17,16 @@ const repoDetails = {
 
 export const HomePage: React.FC = () => {
     const status = useSelector(selectReposStatus) === "idle";
-    const [searchValue, setSearchValue] = React.useState<string>("");
-    const [page, setPage] = React.useState(1);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     return (
         <>
-            <SearchBar
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
-                page={page}
-                rowsPerPage={rowsPerPage}
-            />
+            <SearchBar />
             <div className="main">
                 {status ? (
                     <Welcome />
                 ) : (
                     <>
-                        <RepositoryTable
-                            searchValue={searchValue}
-                            page={page}
-                            setPage={setPage}
-                            rowsPerPage={rowsPerPage}
-                            setRowsPerPage={setRowsPerPage}
-                        />
+                        <RepositoryTable />
                         <RepositoryDetails
                             name={repoDetails.name}
                             language={repoDetails.language}
