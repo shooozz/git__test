@@ -12,7 +12,7 @@ import {
 import styles from "./RepositoryTable.module.scss";
 import { Pagination } from "../Pagination/Pagination";
 import { useSelector } from "react-redux";
-import { selectRepos } from "../../redux/repo/selector";
+import { selectCountRepos, selectRepos } from "../../redux/repo/selector";
 import { format } from "date-fns";
 
 const tableHead = [
@@ -25,6 +25,7 @@ const tableHead = [
 
 export const RepositoryTable: React.FC = () => {
     const resultsRepo = useSelector(selectRepos);
+    const totalCount = useSelector(selectCountRepos);
 
     const repositories = resultsRepo.map((repo) => ({
         forks_count: repo.forks_count,
@@ -36,33 +37,50 @@ export const RepositoryTable: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            <h1>Результаты поиска</h1>
-            <TableContainer component={Paper} className={styles.tableContainer}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            {tableHead.map((item, index) => (
-                                <TableCell key={index}>
-                                    <TableSortLabel>{item}</TableSortLabel>
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {repositories.map((repo, index) => (
-                            <TableRow key={index}>
-                                <TableCell>{repo.name}</TableCell>
-                                <TableCell>{repo.language}</TableCell>
-                                <TableCell>{repo.forks_count}</TableCell>
-                                <TableCell>{repo.stargazers_count}</TableCell>
-                                <TableCell>{repo.updated_at}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            {totalCount >= 1 ? (
+                <>
+                    <h1>Результаты поиска</h1>
+                    <TableContainer
+                        component={Paper}
+                        className={styles.tableContainer}
+                    >
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    {tableHead.map((item, index) => (
+                                        <TableCell key={index}>
+                                            <TableSortLabel>
+                                                {item}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {repositories.map((repo, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{repo.name}</TableCell>
+                                        <TableCell>{repo.language}</TableCell>
+                                        <TableCell>
+                                            {repo.forks_count}
+                                        </TableCell>
+                                        <TableCell>
+                                            {repo.stargazers_count}
+                                        </TableCell>
+                                        <TableCell>{repo.updated_at}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
 
-            <Pagination />
+                    <Pagination />
+                </>
+            ) : (
+                <>
+                    <h1>Не удалось найти репозитории :(</h1>
+                </>
+            )}
         </div>
     );
 };

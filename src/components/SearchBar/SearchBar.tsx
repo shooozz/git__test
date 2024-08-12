@@ -11,7 +11,6 @@ export const SearchBar: React.FC = () => {
     const { query, per_page, page } = useSelector(
         (state: RootState) => state.queryParams
     );
-    // const status = useSelector((state: RootState) => state.repos.status);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(setSearchValue(event.target.value));

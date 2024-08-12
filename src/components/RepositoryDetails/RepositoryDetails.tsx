@@ -3,14 +3,6 @@ import { Chip, Typography, Box } from "@mui/material";
 import styles from "./RepositoryDetails.module.scss";
 import StarIcon from "@mui/icons-material/Star";
 
-// interface RepositoryDetailsProps {
-//     name: string;
-//     language: string;
-//     stars: number;
-//     tags: string[];
-//     license: string;
-// }
-
 const repoDetails = {
     name: "Название репозитария",
     language: "Python",

@@ -25,12 +25,11 @@ export const Pagination: React.FC = () => {
         dispatch(setPage(newPage));
     };
 
-    // Обработчик изменения количества строк на странице
     const handleChangeRowsPerPage = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        dispatch(setPerPage(parseInt(event.target.value, 10)));
-        dispatch(setPage(1)); // Возвращаемся на первую страницу при изменении количества строк
+        dispatch(setPerPage(Number(event.target.value)));
+        dispatch(setPage(1));
     };
 
     return (

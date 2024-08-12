@@ -6,7 +6,7 @@ const initialState: FetchReposParams = {
     sort: "stars",
     order: "desc",
     per_page: 30,
-    page: 0,
+    page: 1,
 };
 
 const queryParamsSlice = createSlice({

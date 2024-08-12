@@ -2,19 +2,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { ReposState } from "./types";
 import { FetchReposParams, Status } from "../types";
+import { initialState } from "./initialState";
+
 const URL_GIT = import.meta.env.VITE_URL_GIT;
 const API_KEY = import.meta.env.VITE_API_KEY;
-
-// incomplete_results
-// items
-// total_count
-
-const initialState: ReposState = {
-    items: [],
-    total_count: 0,
-    status: Status.IDLE,
-    error: null,
-};
 
 export const fetchRepositories = createAsyncThunk(
     "repos/fetchRepositories",
