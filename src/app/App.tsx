@@ -2,15 +2,14 @@ import React from "react";
 
 import { HomePage } from "../pages/HomePage";
 import "../styles/global.scss";
-import { Provider } from "react-redux";
-import { store } from "../redux/store";
+import { StoreProvider } from "./providers/StoreProvider";
 
 export const App: React.FC = () => {
     return (
         <div>
-            <Provider store={store}>
+            <StoreProvider>
                 <HomePage />
-            </Provider>
+            </StoreProvider>
         </div>
     );
 };

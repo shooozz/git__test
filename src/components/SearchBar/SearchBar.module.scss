@@ -5,6 +5,9 @@
     padding: 19px 0px 19px 32px;
     background-color: $primary-color;
     align-items: center !important;
+    top: 0;
+    width: 100%;
+    z-index: 2;
 }
 
 .searchInput {

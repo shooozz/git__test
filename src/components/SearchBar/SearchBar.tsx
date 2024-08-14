@@ -2,13 +2,12 @@ import React from "react";
 import { TextField, Button } from "@mui/material";
 import styles from "./SearchBar.module.scss";
 import { fetchRepositories } from "../../redux/repo/slice";
-import { RootState, useAppDispatch } from "../../redux/store";
-import { useSelector } from "react-redux";
+import { RootState, useAppDispatch, useAppSelector } from "../../redux/store";
 import { setSearchValue } from "../../redux/query/slice";
 
 export const SearchBar: React.FC = () => {
     const dispatch = useAppDispatch();
-    const { query, per_page, page } = useSelector(
+    const { query, sort, order, per_page, page } = useAppSelector(
         (state: RootState) => state.queryParams
     );
 
@@ -21,6 +20,8 @@ export const SearchBar: React.FC = () => {
             dispatch(
                 fetchRepositories({
                     query,
+                    sort,
+                    order,
                     per_page,
                     page,
                 })

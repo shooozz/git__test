@@ -4,14 +4,14 @@ import { Footer } from "../components/Footer/Footer";
 import { SearchBar } from "../components/SearchBar/SearchBar";
 import { RepositoryTable } from "../components/RepositoryTable/RepositoryTable";
 import { RepositoryDetails } from "../components/RepositoryDetails/RepositoryDetails";
-import { useSelector } from "react-redux";
 import { selectReposStatus } from "../redux/repo/selector";
+import { useAppSelector } from "../redux/store";
 
 export const HomePage: React.FC = () => {
-    const status = useSelector(selectReposStatus) === "idle";
+    const status = useAppSelector(selectReposStatus) === "idle";
 
     return (
-        <>
+        <div className="container">
             <SearchBar />
             <div className="main">
                 {status ? (
@@ -24,6 +24,6 @@ export const HomePage: React.FC = () => {
                 )}
             </div>
             <Footer />
-        </>
+        </div>
     );
 };

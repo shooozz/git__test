@@ -1,13 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FetchReposParams } from "../types";
-
-const initialState: FetchReposParams = {
-    query: "",
-    sort: "stars",
-    order: "desc",
-    per_page: 30,
-    page: 1,
-};
+import { initialState } from "./initialState"; // Импортируем initialState
+import { SortKey } from "./types";
 
 const queryParamsSlice = createSlice({
     name: "queryParams",
@@ -16,10 +9,10 @@ const queryParamsSlice = createSlice({
         setSearchValue: (state, action: PayloadAction<string>) => {
             state.query = action.payload;
         },
-        setSort: (state, action: PayloadAction<string>) => {
+        setSort: (state, action: PayloadAction<SortKey>) => {
             state.sort = action.payload;
         },
-        setOrder: (state, action: PayloadAction<string>) => {
+        setOrder: (state, action: PayloadAction<"asc" | "desc">) => {
             state.order = action.payload;
         },
         setPerPage: (state, action: PayloadAction<number>) => {
