@@ -1,7 +1,7 @@
 import React from "react";
 
 import { HomePage } from "../pages/HomePage";
-import "../styles/global.scss";
+import "../shared/styles/global.scss";
 import { StoreProvider } from "./providers/StoreProvider";
 
 export const App: React.FC = () => {
