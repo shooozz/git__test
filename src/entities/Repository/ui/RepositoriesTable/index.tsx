@@ -14,17 +14,19 @@ import { selectCountRepos, selectRepos } from "../../model/selector";
 import { format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "../../../../app/store";
 import { fetchRepositories, setCurrentRepo } from "../../model/slice";
-import { Pagination } from "../../../../shared/ui/Pagination";
 import { querySelectors } from "../../../../features/SearchRepositories/model/selector";
-import { setOrder } from "../../../../features/SearchRepositories/model/slice";
+import {
+    setOrder,
+    setSort,
+} from "../../../../features/SearchRepositories/model/slice";
 import { Repository } from "../../model/types";
+import { SortKey } from "../../../../features/SearchRepositories/model/types";
+import { Pagination } from "../../../../shared/ui/Pagination";
 
 const tableHead = [
-    { label: "Название", key: "name" },
-    { label: "Язык", key: "language" },
-    { label: "Число форков", key: "forks_count" },
-    { label: "Число звезд", key: "stargazers_count" },
-    { label: "Дата обновления", key: "updated_at" },
+    { label: "Число форков", key: "forks" },
+    { label: "Число звезд", key: "stars" },
+    { label: "Дата обновления", key: "updated" },
 ];
 
 export const RepositoryTable: React.FC = () => {
@@ -40,35 +42,23 @@ export const RepositoryTable: React.FC = () => {
     const repositories = useAppSelector(selectRepos);
     const totalCount = useAppSelector(selectCountRepos);
 
-    React.useEffect(() => {
-        dispatch(fetchRepositories({ query, sort, order, per_page, page }));
-    }, [page, per_page, query, sort, order]);
-
     const handleRowClick = (index: number, repo: Repository) => {
         dispatch(setCurrentRepo(repo));
         setSelectedRow(index);
     };
 
-    const handleRequestSort = (property: string) => {
+    React.useEffect(() => {
+        dispatch(fetchRepositories({ query, sort, order, per_page, page }));
+    }, [page, per_page, query, sort, order]);
+
+    const handleRequestSort = (property: SortKey) => {
         if (sort === property) {
             dispatch(setOrder(order === "asc" ? "desc" : "asc"));
         } else {
-            // @ts-ignore
             dispatch(setSort(property));
-            dispatch(setOrder("asc"));
+            dispatch(setOrder("desc"));
         }
     };
-
-    const sortedRepositories = React.useMemo(() => {
-        const sortedArray = [...repositories].sort((a, b) => {
-            // @ts-ignore
-            if (a[sort] < b[sort]) return order === "asc" ? -1 : 1;
-            // @ts-ignore
-            if (a[sort] > b[sort]) return order === "asc" ? 1 : -1;
-            return 0;
-        });
-        return sortedArray;
-    }, [repositories, sort, order]);
 
     return (
         <div className={styles.container}>
@@ -82,6 +72,8 @@ export const RepositoryTable: React.FC = () => {
                         <Table>
                             <TableHead>
                                 <TableRow>
+                                    <TableCell>Название</TableCell>
+                                    <TableCell>Язык</TableCell>
                                     {tableHead.map((item) => (
                                         <TableCell
                                             key={item.key}
@@ -99,7 +91,9 @@ export const RepositoryTable: React.FC = () => {
                                                         : "asc"
                                                 }
                                                 onClick={() =>
-                                                    handleRequestSort(item.key)
+                                                    handleRequestSort(
+                                                        item.key as SortKey
+                                                    )
                                                 }
                                             >
                                                 {item.label}
@@ -109,7 +103,7 @@ export const RepositoryTable: React.FC = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {sortedRepositories.map((repo, index) => (
+                                {repositories.map((repo, index) => (
                                     <TableRow
                                         key={repo.id}
                                         onClick={() =>
@@ -140,13 +134,12 @@ export const RepositoryTable: React.FC = () => {
                             </TableBody>
                         </Table>
                     </TableContainer>
-
                     <Pagination />
                 </>
             ) : (
-                <>
-                    <h1>Ищем репозиторий...</h1>
-                </>
+                <div className={styles.loading}>
+                    <p>Ищем репозиторий...</p>
+                </div>
             )}
         </div>
     );

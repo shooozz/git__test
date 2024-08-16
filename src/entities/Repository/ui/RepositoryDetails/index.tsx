@@ -8,44 +8,40 @@ import { selectCurrentRepo } from "../../model/selector";
 export const RepositoryDetails: React.FC = () => {
     const repoDetails = useAppSelector(selectCurrentRepo);
 
-    console.log(repoDetails);
-
     return (
-        <div>
-            {repoDetails ? (
-                <Box className={styles.repositoryDetails}>
-                    <Typography variant="h5" className={styles.name}>
-                        {repoDetails?.name}
-                    </Typography>
+        <div className="container">
+            <Box className={styles.repositoryDetails}>
+                <Typography variant="h5" className={styles.name}>
+                    {repoDetails?.name}
+                </Typography>
 
-                    <Box className={styles.languageStars}>
-                        <Chip
-                            label={repoDetails?.language}
-                            className={styles.languageChip}
-                        />
+                <Box className={styles.languageStars}>
+                    <Chip
+                        label={repoDetails?.language}
+                        className={styles.languageChip}
+                    />
+                    <div className={styles.starsCount}>
                         <StarIcon sx={{ color: "#FFB400" }}></StarIcon>
                         <Typography className={styles.stars}>
                             {repoDetails?.stargazers_count}
                         </Typography>
-                    </Box>
-
-                    <Box className={styles.tags}>
-                        {repoDetails?.topics.map((tag) => (
-                            <Chip
-                                key={tag}
-                                label={tag}
-                                className={styles.tagChip}
-                            />
-                        ))}
-                    </Box>
-
-                    <Typography className={styles.license}>
-                        {repoDetails?.license?.name}
-                    </Typography>
+                    </div>
                 </Box>
-            ) : (
-                <p>Выберите репозитарий</p>
-            )}
+
+                <Box className={styles.tags}>
+                    {repoDetails?.topics.map((tag) => (
+                        <Chip
+                            key={tag}
+                            label={tag}
+                            className={styles.tagChip}
+                        />
+                    ))}
+                </Box>
+
+                <Typography className={styles.license}>
+                    {repoDetails?.license?.name}
+                </Typography>
+            </Box>
         </div>
     );
 };

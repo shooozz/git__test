@@ -2,27 +2,23 @@ import React from "react";
 import styles from "./Pagination.module.scss";
 import { TablePagination } from "@mui/material";
 
-import { RootState, useAppDispatch, useAppSelector } from "../../../app/store";
+import { useAppDispatch, useAppSelector } from "../../../app/store";
 import { selectCountRepos } from "../../../entities/Repository/model/selector";
-import { fetchRepositories } from "../../../entities/Repository/model/slice";
 import {
     setPage,
     setPerPage,
 } from "../../../features/SearchRepositories/model/slice";
+import { querySelectors } from "../../../features/SearchRepositories/model/selector";
 
 export const Pagination: React.FC = () => {
     const dispatch = useAppDispatch();
-    const { query, sort, order, per_page, page } = useAppSelector(
-        (state: RootState) => state.queryParams
-    );
+
+    const per_page = useAppSelector(querySelectors.selectPerPage);
+    const page = useAppSelector(querySelectors.selectPage);
     const totalCount = useAppSelector(selectCountRepos);
 
-    React.useEffect(() => {
-        dispatch(fetchRepositories({ query, sort, order, per_page, page }));
-    }, [page, per_page, query]);
-
     const handleChangePage = (
-        event: React.MouseEvent<HTMLButtonElement> | null,
+        _: React.MouseEvent<HTMLButtonElement> | null,
         newPage: number
     ) => {
         dispatch(setPage(newPage));
