@@ -1,24 +1,29 @@
-// import { useEffect } from "react";
-// import { RootState, useAppDispatch, useAppSelector } from "../redux/store";
-// import {
-//     selectRepos,
-//     selectReposStatus,
-// } from "../entities/Repository/model/selector";
-// import { fetchRepositories } from "../entities/Repository/model/slice";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/store";
+import {
+    selectRepos,
+    selectReposStatus,
+} from "../../entities/Repository/model/selector";
+import { fetchRepositories } from "../../entities/Repository/model/slice";
+import { querySelectors } from "../../features/SearchRepositories/model/selector";
 
-// const useFetchRepos = () => {
-//     const { query, sort, order, per_page, page } = useAppSelector(
-//         (state: RootState) => state.queryParams
-//     );
-//     const dispatch = useAppDispatch();
-//     const repos = useAppSelector(selectRepos);
-//     const reposStatus = useAppSelector(selectReposStatus);
+const useFetchRepos = () => {
+    const dispatch = useAppDispatch();
 
-//     useEffect(() => {
-//         dispatch(fetchRepositories({ query, sort, order, per_page, page }));
-//     }, [query, sort, order, per_page, page]);
+    const query = useAppSelector(querySelectors.selectQuery);
+    const sort = useAppSelector(querySelectors.selectSort);
+    const order = useAppSelector(querySelectors.selectOrder);
+    const per_page = useAppSelector(querySelectors.selectPerPage);
+    const page = useAppSelector(querySelectors.selectPage);
 
-//     return { repos, reposStatus };
-// };
+    const repos = useAppSelector(selectRepos);
+    const reposStatus = useAppSelector(selectReposStatus);
 
-// export default useFetchRepos;
+    useEffect(() => {
+        dispatch(fetchRepositories({ query, sort, order, per_page, page }));
+    }, [query, sort, order, per_page, page]);
+
+    return { repos, reposStatus };
+};
+
+export default useFetchRepos;

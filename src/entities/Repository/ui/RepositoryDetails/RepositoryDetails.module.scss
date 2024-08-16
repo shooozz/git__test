@@ -1,17 +1,18 @@
 .repositoryDetails {
     padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .name {
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 32px !important;
+    font-weight: 400;
+    line-height: 40px;
+    padding-bottom: 16px;
+    color: #000;
 }
 
 .languageStars {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
 
@@ -23,7 +24,12 @@
 
     .stars {
         font-size: 16px;
+        padding-left: 7px;
     }
+}
+
+.starsCount {
+    display: flex;
 }
 
 .tags {
